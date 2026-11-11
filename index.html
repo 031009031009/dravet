@@ -161,8 +161,22 @@ img{display:block}
 }
 .frag.on{opacity:1}
 
-/* 黑板粉笔字 */
-#s1 .bb{position:absolute;left:55%;top:36%;opacity:0;transition:opacity .8s var(--ease);pointer-events:none}
+/* 昏倒后同学的气泡 */
+.cbub{
+  position:absolute;z-index:20;max-width:36vw;
+  background:rgba(255,255,255,.95);color:#15171c;
+  padding:12px 20px;border-radius:16px 16px 16px 4px;
+  font-size:clamp(14px,1.7vw,20px);letter-spacing:.05em;line-height:1.5;
+  opacity:0;transform:translateY(12px) scale(.94);transition:.5s var(--ease);
+  box-shadow:0 14px 36px rgba(0,0,0,.5);pointer-events:none;
+}
+.cbub::after{
+  content:"";position:absolute;bottom:-10px;left:24px;
+  border:11px solid transparent;border-top-color:rgba(255,255,255,.95);border-bottom:0;
+}
+.cbub.on{opacity:1;transform:none}
+
+/* 黑板粉笔字 */#s1 .bb{position:absolute;left:55%;top:36%;opacity:0;transition:opacity .8s var(--ease);pointer-events:none}
 #s1 .bb.on{opacity:1}
 #s1 .bbt{
   font-family:"Kaiti SC","STKaiti","KaiTi","Noto Serif CJK SC",serif;
@@ -587,6 +601,9 @@ details .inner{padding:0 22px 22px}
     <div class="bg" id="b2sand" style="background-image:url(__IMG_sandpit__)"></div>
     <div class="bg" id="b2coll" style="background-image:url(__IMG_collapse__)"></div>
     <div class="bg" id="b2fig" style="background-image:url(__IMG_figures__)"></div>
+    <!-- 同学的气泡 -->
+    <div class="cbub" id="cb1" style="left:8%;top:15%">他倒下了！</div>
+    <div class="cbub" id="cb2" style="right:7%;top:33%">快喊老师过来！</div>
   </div>
   <div id="glow"></div>
   <div id="suncreep"></div>
@@ -1613,7 +1630,16 @@ async function runPlayground() {
 
   await sleep(3000);
   setBg('b2fig');
-  await sleep(2600);
+  await sleep(1500);
+
+  /* 同学的气泡 */
+  $('#cb1').classList.add('on');
+  await sleep(1800);
+  $('#cb2').classList.add('on');
+  await sleep(2200);
+  $('#cb1').classList.remove('on');
+  $('#cb2').classList.remove('on');
+  await sleep(600);
 
   // 声音消失
   Sound.fadeAll(0, 3.2);
